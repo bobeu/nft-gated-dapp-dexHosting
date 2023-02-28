@@ -24,6 +24,9 @@ export const CardComponent = (props: CardProps) => {
     button_1_start,
     button_2_start,
     button_3_start,
+    disableButton_1,
+    disableButton_2,
+    disableButton_3,
     displayTextfield,
     isButton_1_display,
     isButton_2_display,
@@ -74,7 +77,7 @@ export const CardComponent = (props: CardProps) => {
             border: '0.1px solid rgba(100, 100, 100, 0.6)',
             transition: '0.2sec ease-in-out'
           }
-        }} onClick={handleButton_1_Click} size="small">{displayChild? children : button_1_name}</Button>}
+        }} onClick={handleButton_1_Click} disabled={disableButton_1} size="small">{displayChild? children : button_1_name}</Button>}
         { isButton_2_display && <Button startIcon={button_2_start} variant={'contained'} sx={{
           background: 'rgba(100, 100, 100, 0.6)',
           width: '100%',
@@ -85,7 +88,7 @@ export const CardComponent = (props: CardProps) => {
             border: '0.1px solid rgba(100, 100, 100, 0.5)',
             transition: '0.2sec ease-in-out'
           }
-        }} onClick={handleButton_2_Click} size="small">{displayChild? children : button_2_name}</Button>}
+        }} onClick={handleButton_2_Click} disabled={disableButton_2} size="small">{displayChild? children : button_2_name}</Button>}
         { isButton_3_display && <Button startIcon={button_3_start} variant={'contained'} sx={{
           background: 'rgba(100, 100, 100, 0.6)',
           width: '100%',
@@ -96,7 +99,7 @@ export const CardComponent = (props: CardProps) => {
             border: '0.1px solid rgba(100, 100, 100, 0.5)',
             transition: '0.2sec ease-in-out'
           }
-        }} onClick={handleButton_3_Click} size="small">{displayChild? children : button_3_name}</Button>}
+        }} onClick={handleButton_3_Click} disabled={disableButton_3} size="small">{displayChild? children : button_3_name}</Button>}
       </CardActions>
     </Card>
   )

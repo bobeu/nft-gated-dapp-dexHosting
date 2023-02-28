@@ -8,6 +8,12 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
     log: true,
   });
 
+  await deploy("Membership", {
+    from: deployer,
+    args: [],
+    log: true,
+  });
+
   await deploy("SwapLab", {
     from: deployer,
     args: [ token?.address ],
@@ -15,4 +21,4 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
   });
 };
 
-module.exports.tags = ["DRythm"];
+module.exports.tags = ["SwapLab", "Membership", "TestToken"];

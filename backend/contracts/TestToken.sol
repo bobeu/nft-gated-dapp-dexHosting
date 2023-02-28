@@ -6,21 +6,21 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract TestToken is ERC20, Ownable{
-  uint public dropValue;
+  uint public testAmount;
   mapping(address => bool) public isClaimed;
 
   constructor() ERC20('CELOG Token', 'CELOG') {
-    dropValue = 5000 * (10 ** 18);
-    _mint(msg.sender, dropValue);
+    testAmount = 5000 * (10 ** 18);
+    _mint(msg.sender, testAmount);
   }
 
   function selfClaimDrop() public {
     require(!isClaimed[msg.sender], "User already Claimed");
     isClaimed[msg.sender] = true;
-    _mint(msg.sender, dropValue);
+    _mint(msg.sender, testAmount);
   }
 
   function specialDrop(address to) public onlyOwner {
-    _mint(to, dropValue);
+    _mint(to, testAmount);
   }
 }

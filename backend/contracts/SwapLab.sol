@@ -58,7 +58,7 @@ contract SwapLab is Ownable, ReentrancyGuard {
     uint[] memory rates = new uint[](1);
     sAsset[0] = _supportedAsset;
     rates[0] = 50 * (10 ** 18);
-    swapfee = 1e17 wei;
+    swapfee = 1e14 wei;
     providersAddress.push(msg.sender);
 
     _setNewAsset(

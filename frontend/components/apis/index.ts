@@ -10,6 +10,8 @@ function contractInstances(props: InstanceProps) {
     swapAddr,
     tokenAbi,
     tokenAddr,
+    memberAbi,
+    memberAddr,
     providerOrSigner
   } = props;
   if(!providerOrSigner) alert('Provider not ready. Please connect wallet!');
@@ -17,20 +19,29 @@ function contractInstances(props: InstanceProps) {
   const swapLab_noSigner = new Contract(swapAddr, swapAbi, new ethers.providers.Web3Provider(providerOrSigner).getSigner());
   const token = new Contract(tokenAddr, tokenAbi, new ethers.providers.Web3Provider(providerOrSigner).getSigner());
   const token_noSigner = new Contract(tokenAddr, tokenAbi, new ethers.providers.Web3Provider(providerOrSigner).getSigner());
+  const nft = new Contract(memberAddr, memberAbi, new ethers.providers.Web3Provider(providerOrSigner).getSigner());
 
-  return { swapLab, swapLab_noSigner, token, token_noSigner }
+  return { swapLab, swapLab_noSigner, token, token_noSigner, nft }
 }
 
 async function runContractFunc(options: OptionProps) {
   const { functionName, cancelLoading, providerOrSigner, value, account, amount } = options;
-  const { swapAbi, swapLabAddr, testTokenAbi, testAddr } = getContractData();
+  const { 
+    swapAbi,
+    memberAbi,
+    memberAddr,
+    swapLabAddr, 
+    testTokenAbi, 
+    testAddr } = getContractData();
   const { 
     swapLab,
-    // swapLab_noSigner,
+    nft,
     token,
     token_noSigner
    } = contractInstances({
     swapAbi,
+    memberAbi,
+    memberAddr,
     swapAddr: swapLabAddr,
     tokenAbi: testTokenAbi,
     tokenAddr: testAddr,
@@ -53,17 +64,35 @@ async function runContractFunc(options: OptionProps) {
   const getBalance = async(alc:string | undefined) : Promise<BigNumber> => {
     return await token.balanceOf(alc);
   }
+
+  const getNFTBalance = async(alc:string | undefined) : Promise<BigNumber> => {
+    return await nft.balanceOf(alc);
+  }
   
   switch (functionName) {
     case 'swap':
-      console.log("Test addr", testAddr);
       const txn = await swapLab.swapERC20ForCelo(testAddr, {value: value});
       await txn?.wait(2).then(async(rec: ContractReceipt) => {
         if(rec) {
           result.data = await getData();
+          result.balanceOrAllowance = await getAllowance(swapLabAddr);
           if(cancelLoading) cancelLoading();
         }
       });
+      break;
+
+    case 'mint':
+      const trxn = await nft.mint({value: value});
+      await trxn?.wait(2).then(async(rec: ContractReceipt) => {
+        if(rec) {
+          result.balanceOrAllowance = await getNFTBalance(account);
+          if(cancelLoading) cancelLoading();
+        }
+      });
+      break;
+
+    case 'nftBalance':
+      result.balanceOrAllowance = await getNFTBalance(account);
       break;
 
     case 'clearAllowance':

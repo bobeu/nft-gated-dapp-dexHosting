@@ -12,6 +12,8 @@ export const contractData = {
 export interface InstanceProps {
   swapAbi: any;
   tokenAbi: any;
+  memberAbi: any;
+  memberAddr: string;
   swapAddr: string; 
   tokenAddr: string; 
   providerOrSigner: any
@@ -49,6 +51,9 @@ export interface CardProps {
   isButton_1_display?: boolean;
   isButton_2_display?: boolean;
   isButton_3_display?: boolean;
+  disableButton_1?: boolean;
+  disableButton_2?: boolean;
+  disableButton_3?: boolean;
   handleButton_1_Click?: () => void;
   handleButton_2_Click?: () => void;
   handleButton_3_Click?: () => void;
@@ -87,4 +92,10 @@ export const data = {
     position: BigNumber(0),
     isExist: false
   },
+}
+
+export interface SignUprops {
+  setauth: () => void;
+  isUser: boolean;
+  handleClick: (x:string, y?: boolean) => Promise<void>;
 }

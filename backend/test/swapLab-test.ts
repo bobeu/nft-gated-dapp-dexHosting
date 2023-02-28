@@ -19,17 +19,27 @@ describe("SwapLab Test", function () {
     const [owner, acc1, acc2] = await ethers.getSigners();
     const SwapLab = await ethers.getContractFactory("SwapLab");
     const TestToken = await ethers.getContractFactory("TestToken");
+    const Membership = await ethers.getContractFactory("Membership");
     
     const testToken = await TestToken.deploy();
     await testToken.deployed();
+
+    const membership = await Membership.deploy();
+    await membership.deployed();
+
     const swapLab = await SwapLab.deploy(testToken.address);
     await swapLab.deployed();
+
+    const mintMembershipNFT = async(who:SignerWithAddress) => {
+      return await membership.connect(who).mint({value: SWAPFEE});
+    }
     
     const claimDrop = async() => {
       await testToken.connect(acc1).selfClaimDrop();
     }
 
     const addLiquidityAndTest = async(from:SignerWithAddress, value: BigNumberish) => {
+      expect(await isMember(from.address)).to.be.equal(true);
       await swapLab.connect(from).addLiquidity({value: value});
       const balAfterAddLiquidity = await getBalance(swapLab.address);
       const data = await getdata(from);
@@ -40,6 +50,7 @@ describe("SwapLab Test", function () {
     }
 
     const removeLiquidityAndTest = async(from:SignerWithAddress, value: BigNumberish) => {
+      expect(await isMember(from.address)).to.be.equal(true);
       await addLiquidityAndTest(from, value);
       const balContractAfterAddLiquidity = await getBalance(swapLab.address);
       const balFromAfterAddLiquidity = await getBalance(from.address);
@@ -74,7 +85,7 @@ describe("SwapLab Test", function () {
         await claimDrop().then(async() => {
           await balanceOf(from.address).then(async(retVal) => {
             expect(retVal).to.be.gt(intiBal);
-            await testToken.connect(acc1).approve(swapLab.address, AMOUNT_TO_SWAP).then(async(x) => {
+            await testToken.connect(acc1).approve(swapLab.address, AMOUNT_TO_SWAP).then(async(x: any) => {
               if(x) {
                 await swapLab.connect(acc1).swapERC20ForCelo(testToken.address, {value: SWAPFEE});
                 const newBal = await balanceOf(acc1.address);
@@ -88,6 +99,10 @@ describe("SwapLab Test", function () {
       
     }
 
+    const isMember = async(who: string) => { 
+      const bal = await membership.balanceOf(who);
+      return bal.toString() === '1'
+    }
     const balanceOf = async(who: string) => { return await testToken.balanceOf(who); }
 
     return { 
@@ -102,6 +117,7 @@ describe("SwapLab Test", function () {
       testToken,
       getBalance,
       swapAndTest,
+      mintMembershipNFT,
       addLiquidityAndTest,
       removeLiquidityAndTest,
     };
@@ -118,22 +134,28 @@ describe("SwapLab Test", function () {
     });
 
     it("Should add liquidity successFully", async function () {
-      const { acc1, addLiquidityAndTest } = await loadFixture(deployContractsFixture);
-        await addLiquidityAndTest(acc1, DEPOSIT);
+      const { acc1, addLiquidityAndTest, mintMembershipNFT } = await loadFixture(deployContractsFixture);
+      await mintMembershipNFT(acc1);  
+      await addLiquidityAndTest(acc1, DEPOSIT);
     });
 
     it("Should remove liquidity successFully", async function () {
-      const { acc1, removeLiquidityAndTest } = await loadFixture(deployContractsFixture);
+      const { acc1, removeLiquidityAndTest, mintMembershipNFT } = await loadFixture(deployContractsFixture);
+      await mintMembershipNFT(acc1);
       await removeLiquidityAndTest(acc1, DEPOSIT);
     });
 
     it("Should swapToken successFully", async function () {
-      const { acc1, swapAndTest, acc2 } = await loadFixture(deployContractsFixture);
+      const { acc1, swapAndTest, acc2, mintMembershipNFT } = await loadFixture(deployContractsFixture);
+      await mintMembershipNFT(acc1);
+      await mintMembershipNFT(acc2);
       await swapAndTest(acc1, acc2);
     });
 
     it("Should split successFully", async function () {
-      const { acc1, acc2, swapAndTest, swapLab, getBalance } = await loadFixture(deployContractsFixture);
+      const { acc1, acc2, swapAndTest, swapLab, getBalance, mintMembershipNFT } = await loadFixture(deployContractsFixture);
+      await mintMembershipNFT(acc1);
+      await mintMembershipNFT(acc2);
       await swapAndTest(acc1, acc2);
       const intiBalAcc2B4Split = await getBalance(acc2.address);
       const intiBalContractB4Split = await getBalance(swapLab.address);
@@ -145,13 +167,17 @@ describe("SwapLab Test", function () {
     });
 
     it("Should revert if not provider trying to split", async function () {
-      const { acc1, acc2, owner, swapAndTest, addLiquidityAndTest, swapLab, getBalance } = await loadFixture(deployContractsFixture);
+      const { acc1, acc2, owner, swapAndTest, mintMembershipNFT, swapLab } = await loadFixture(deployContractsFixture);
+      await mintMembershipNFT(acc1);
+      await mintMembershipNFT(acc2);
+      await mintMembershipNFT(owner);
       await swapAndTest(acc1, owner);
       expect(swapLab.connect(acc2).splitFee()).to.revertedWith("Not a provider");
     });
 
     it("Should revert if no fee is generated", async function () {
-      const { acc2, addLiquidityAndTest, swapLab } = await loadFixture(deployContractsFixture);
+      const { acc2, addLiquidityAndTest, swapLab, mintMembershipNFT } = await loadFixture(deployContractsFixture);
+      await mintMembershipNFT(acc2);
       await addLiquidityAndTest(acc2, DEPOSIT);
       expect(swapLab.connect(acc2).splitFee()).to.revertedWith("Fee cannot be split at this time");
     });
