@@ -112,7 +112,7 @@ export function AppProtected () {
     try {
       const amt = BigNumber(amount);
       let val = ethers.utils.parseEther(value);
-      if(functionName === 'swap') val = ethers.utils.parseEther('0.1');
+      if(functionName === 'swap') val = ethers.utils.parseEther('0.0001');
       if(functionName === 'mint') val = ethers.utils.parseEther('0.01');
       console.log("Val", val.toString())
       const result = await runContractFunc({
@@ -146,7 +146,6 @@ export function AppProtected () {
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <Box sx={{width: '100%', display: 'flex', justifyContent: 'space-around', alignItems: 'center'}}>
-              {/* <Typography variant='h5' component='button' color='orange' ></Typography> */}
               <Typography variant='button' component='button' color={orange[500]}>
                 Warning! This sample project is for tutorial purpose and may not be suited for production.<br/>
                 It runs on Celo Alfajores. Do not use real $Celo
