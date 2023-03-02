@@ -9,11 +9,11 @@
 
 # Description
 
-SwapLab is a small project built from Celosage tutorial that showcase how to build a decentralized ERC20 to Celo exchange. It comprises the smart contract and frontend to interact with it. CELOG token was created to act as a test token that will be exchanged for $CELO.
+SwapLab is a small project built from Celosage tutorial that showcase how to build a Dapp that exchanges ERC20 token to $Celo coin. It comprises the smart contract and frontend to interact with it. $CELOG token was created to act as a test token that will be exchanged for $CELO.
 
 
 # Technology
-This dApp is built on Celo alfajores (Celo testnet).
+The smart contract is deployed on Celo alfajores (Celo testnet).
 
 # Stack
 - Smart contract:
@@ -28,14 +28,14 @@ This dApp is built on Celo alfajores (Celo testnet).
   - Typescript
 
 - Deployment
-  - Vercel
+The tutorial is deployed on decentralized hosting service - IPFS through a gateway called Spheron. Use this **[link](https://nft-gated-dapp-dexhosting-1b22e1.spheron.app/)** to interact with the demo app.
 
 # How to run
 
 Compile, test and deploy contract:
 
-- Git clone https://github.com/bobeu/feature-rich-persistent-dapp-on-celo-using-wagmi.git
-- cd feature-rich-persistent-dapp-on-celo-using-wagmi/backend
+- Git clone https://github.com/bobeu/persistent-dapp-on-celo-using-wagmi.git
+- cd persistent-dapp-on-celo-using-wagmi/backend
 - yarn install
 
 - compile
