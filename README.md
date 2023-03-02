@@ -13,7 +13,7 @@ SwapLab is a small project built from Celosage tutorial that showcase how to bui
 
 
 # Technology
-The smart contract is deployed on Celo alfajores (Celo testnet).
+The smart contract is deployed on Celo testnet - Alfajores.
 
 # Stack
 - Smart contract:
@@ -28,14 +28,14 @@ The smart contract is deployed on Celo alfajores (Celo testnet).
   - Typescript
 
 - Deployment
-The tutorial is deployed on decentralized hosting service - IPFS through a gateway called Spheron. Use this **[link](https://nft-gated-dapp-dexhosting-1b22e1.spheron.app/)** to interact with the demo app.
+The tutorial is deployed on decentralized hosting service - IPFS using Spheron as a gateway. Use this **[link](https://nft-gated-dapp-dexhosting-1b22e1.spheron.app/)** to interact with the demo app.
 
 # How to run
 
 Compile, test and deploy contract:
 
-- Git clone https://github.com/bobeu/persistent-dapp-on-celo-using-wagmi.git
-- cd persistent-dapp-on-celo-using-wagmi/backend
+- Git clone https://github.com/bobeu/nft-gated-dapp-dexHosting.git
+- cd nft-gated-dapp-dexHosting/backend
 - yarn install
 
 - compile
