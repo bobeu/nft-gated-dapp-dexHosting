@@ -28,6 +28,13 @@ export function Home () {
           <Typography variant="overline" align="center" color="green" paragraph>
             Built by <span style={{color: 'rgba(170, 170, 170, 0.9)'}}><a href="https://github.com/bobeu/">Isaac J.</a></span> for Celo developers - #celosage
           </Typography>
+          <Typography variant='h6' component='button' color='orange' >Warning!</Typography>
+          <Box sx={{display: 'flex', justifyContent: 'center', }}>
+            <Typography variant='body2' component='button' color='yellowgreen'>
+              This sample project is for tutorial purpose and may not be suited for production.<br/>
+              It runs on Celo Alfajores. Do not use real $Celo
+            </Typography>
+          </Box>
           <Stack sx={{ pt: 4 }} direction="row" spacing={2} justifyContent="center">
           <ConnectKitButton />
           <Button variant="outlined">
@@ -35,10 +42,9 @@ export function Home () {
               '&:hover': {
                 border: 'rgba(100, 100, 100, 0.5)'
               }
-            }} href="https://github.com/bobeu/feature-rich-persistent-dapp-on-celo-using-wagmi" underline='none'>Source code</Link> 
+            }} href="https://github.com/bobeu/nft-gated-dapp-dexHosting" underline='none'>Source code</Link> 
           </Button>
         </Stack>
-        
       </Container>
     </Box>
   </main>
